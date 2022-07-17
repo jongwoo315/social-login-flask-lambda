@@ -1,0 +1,25 @@
+class Config(object):
+    DEBUG = ''
+    SQLALCHEMY_DATABASE_URI = ''
+    SECRET_KEY = ''
+
+
+class DevelopmentConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://dbadmin:{pw}@{host}:{port}/{db}?charset=utf8'
+    SQLALCHEMY_DATABASE_URI_LOCAL = 'mysql+pymysql://{user}:{pw}@{host}:{port}/{db}?charset=utf8'
+    SECRET_KEY = 'dev'
+    TWITTER_CONSUMER_KEY = ''
+    TWITTER_CONSUMER_SECRET = ''
+    KAKAO_CONSUMER_KEY = ''
+    KAKAO_CONSUMER_SECRET = ''
+
+
+class ProductionConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = ''
+    SECRET_KEY = 'prod'
+    TWITTER_CONSUMER_KEY = ''
+    TWITTER_CONSUMER_SECRET = ''
+    KAKAO_CONSUMER_KEY = ''
+    KAKAO_CONSUMER_SECRET = ''

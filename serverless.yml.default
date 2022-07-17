@@ -1,0 +1,61 @@
+service: insert-your-value
+
+plugins:
+  - serverless-wsgi
+
+provider:
+  name: aws
+  runtime: python3.9
+  profile: insert-your-value
+  region: ${opt:region, 'ap-northeast-2'}
+  stage: ${opt:stage, 'dev'}
+  versionFunctions: false
+  timeout: 30
+  memorySize: 1024
+  environment:
+    PYTHONPATH: ":/opt"
+    STAGE: ${self:provider.stage, 'dev'}
+  vpc:
+    securityGroupIds:
+      - insert-your-value
+      - insert-your-value
+    subnetIds:
+      - insert-your-value
+      - insert-your-value
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
+
+custom:
+  wsgi:
+    app: src/app.app
+    packRequirements: false
+
+layers:
+  PythonLibVendor:
+    path: vendor
+    name: PythonLibVendor
+    compatibleRuntimes:
+      - python3.9
+
+package:
+  individually: true
+  include:
+    - src/helper/**
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    layers:
+      - {Ref: PythonLibVendorLambdaLayer}
+    package:
+      include:
+        - src/app.py
+        - src/config.py
+        - src/models/**
+        - src/web_service/**
+      exclude:
+        - ./**
+    events:
+      - http: ANY /
+      - http: 'ANY /{proxy+}'
